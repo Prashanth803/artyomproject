@@ -52,10 +52,12 @@
          indexes: ['Hello', 'hi', 'hey'],
          action: () => {
              artyom.say('Hello! Would you like to use continuous or interactive mode?');
+             console.log('Hello! Would you like to use continuous or interactive mode?');
              artyom.redirectRecognizedTextOutput((recognized) => {
                  const response = recognized.trim().toLowerCase();
                  if (response === 'continuous') {
                      artyom.say("This is how continuos works");
+                     console.log("This is how continuos works");
                  } else if (response === 'interactive') {
                  } else {
                      artyom.say("Sorry, I didn't understand your choice. Please say 'continuous' or 'interactive'.");
