@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>testing</title>
+</head>
+<style>
+    te-xt {
+         display: none;
+     }
+     #para1,#para2 {
+         display: none;
+     }
+ </style>
+ <body>
+     <div id="console"></div>
+ 
+     <p id="p1">The equation: x*y+z</p>
+     <h2>Select your choice</h2>
+     <form>
+         <label>
+             <input type="radio" name="flow" value="continuous" checked> Continuous
+         </label>
+         <br>
+         <label>
+             <input type="radio" name="flow" value="interactive"> Interactive
+         </label>
+         <br>
+     </form>
+     <button id="btn">Submit</button>
+     <text-description id="first" refid="p1" visibility="false" reader="true" flow="continuous">
+         <te-xt id="line1">Level 1: x star y plus z</te-xt><br>
+         <te-xt id="line2">Level 2: x multiplies y added with z</te-xt><br>
+     </text-description>
+     <p id="para1"> Continue to the next level.<br> 
+         <button id="btn1">Continue</button>
+     </p>
+     <p id="para2">Do you like me to repeat<br>
+         <button id="btn2">Repeat</button>
+     </p>
+     
+     
+     <script src="artyom.window.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+     <script>
+        const artyom=new Artyom();
+         artyom.addCommands([
+     {
+         indexes: ['Hello', 'hi', 'hey'],
+         action: () => {
+             artyom.say('Hello! Would you like to use continuous or interactive mode?');
+             artyom.redirectRecognizedTextOutput((recognized) => {
+                 const response = recognized.trim().toLowerCase();
+                 if (response === 'continuous') {
+                     artyom.say("This is how continuos works");
+                 } else if (response === 'interactive') {
+                 } else {
+                     artyom.say("Sorry, I didn't understand your choice. Please say 'continuous' or 'interactive'.");
+                 }
+             });
+         }
+     }
+ ]);
+ 
+         
+         artyom.initialize({
+             lang:'en-GB',
+             continuos:true,
+             soundex:true,
+             samrt:true,
+             debug:true,
+             executionKeyword:'and do it now',
+             listen:true,
+         }).then(()=>{
+             console.log("artyom has sucessfully started");
+             $("#console").append("please speak to exccute command");
+         }).catch(err=>{
+             console.log("Artyom has failed");
+             $("#append").append("artyom failed",err);
+         });
+         </script>
+
+         <script>
+         const radioButtons = document.querySelectorAll('input[name="flow"]');
+         const textDescription = document.getElementById('first');
+         const btn = document.getElementById('btn');
+         const btn1 = document.getElementById('btn1');
+         let flag = 0;
+         let currentIndex = 0;
+ 
+         radioButtons.forEach((radioButton) => {
+             radioButton.addEventListener('change', () => {
+                 // Get the selected radio button value
+                 const selectedValue = document.querySelector('input[name="flow"]:checked').value;
+                 if (selectedValue == 'interactive') flag = 1;
+                 console.log(flag);
+                 // Update the attributes of the text-description element
+                 textDescription.setAttribute('flow', selectedValue);
+             });
+         });
+ 
+         // Function to display the next "te-xt" element
+         function displayNextTextElement() {
+             const textElements = document.querySelectorAll('te-xt');
+             if (currentIndex < textElements.length) {
+                 textElements[currentIndex].style.display = 'block';
+                 currentIndex++;
+                 // All elements displayed, show "Continue" button and para1
+                 showPara1();
+             }
+             else{
+                 showpara2();
+             }
+         }
+ 
+         // Function to show para1 and the "Continue" button
+         function showPara1() {
+             let para1 = document.getElementById('para1');
+             para1.style.display = 'block';
+             btn1.addEventListener('click', () => {
+                 para1.style.display = 'none';
+                 displayNextTextElement(); // Display the next "te-xt" element after "Continue" is clicked
+             });
+         }
+ 
+         btn.addEventListener('click', () => {
+             if (flag == 0) {
+                 let elements = document.querySelectorAll('te-xt');
+                 elements.forEach((element) => {
+                     element.style.display = 'block';
+                 });
+                 showpara2();
+              // Show para1 after displaying all "te-xt" elements
+             } else if (flag == 1) {
+                 displayNextTextElement(); // Display the first "te-xt" element immediately
+                 
+             }
+         });
+         let btn2=document.getElementById('btn2');
+       
+         function showpara2(){
+             let para2=document.getElementById('para2');
+             para2.style.display='block';
+         }
+         btn2.addEventListener('click',()=>{
+             location.reload();
+         });
+ 
+     </script>
+</body>
+</html>
