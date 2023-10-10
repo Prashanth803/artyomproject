@@ -3,87 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="/favicon.ico" type="image/x-icon">
-
     <title>testing</title>
 </head>
 <style>
     te-xt {
-         display: none;
-     }
-     #para1,#para2 {
-         display: none;
-     }
- </style>
- <body>
-     <div id="console"></div>
- 
-     <p id="p1">The equation: x*y+z</p>
-     <h2>Select your choice</h2>
-     <form>
-         <label>
-             <input type="radio" name="flow" value="continuous" checked> Continuous
-         </label>
-         <br>
-         <label>
-             <input type="radio" name="flow" value="interactive"> Interactive
-         </label>
-         <br>
-     </form>
-     <button id="btn">Submit</button>
-     <text-description id="first" refid="p1" visibility="false" reader="true" flow="continuous">
-         <te-xt id="line1">Level 1: x star y plus z</te-xt><br>
-         <te-xt id="line2">Level 2: x multiplies y added with z</te-xt><br>
-     </text-description>
-     <p id="para1"> Continue to the next level.<br> 
-         <button id="btn1">Continue</button>
-     </p>
-     <p id="para2">Do you like me to repeat<br>
-         <button id="btn2">Repeat</button>
-     </p>
-     
-     
-     <script src="artyom.window.js"></script>
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-     <script>
-        const artyom=new Artyom();
-         artyom.addCommands([
-     {
-         indexes: ['Hello', 'hi', 'hey'],
-         action: () => {
-             artyom.say('Hello! Would you like to use continuous or interactive mode?');
-             console.log('Hello! Would you like to use continuous or interactive mode?');
-             artyom.redirectRecognizedTextOutput((recognized) => {
-                 const response = recognized.trim().toLowerCase();
-                 if (response === 'continuous') {
-                     artyom.say("This is how continuos works");
-                     console.log("This is how continuos works");
-                 } else if (response === 'interactive') {
-                 } else {
-                     artyom.say("Sorry, I didn't understand your choice. Please say 'continuous' or 'interactive'.");
-                 }
-             });
-         }
-     }
- ]);
- 
-         
-         artyom.initialize({
-             lang:'en-GB',
-             continuos:true,
-             soundex:true,
-             smart:true,
-             debug:true,
-             executionKeyword:'and do it now',
-             listen:true,
-         }).then(()=>{
-             console.log("artyom has sucessfully started");
-             $("#console").append("please speak to exccute command");
-         }).catch(err=>{
-             console.log("Artyom has failed");
-             $("#append").append("artyom failed",err);
-         });
-         </script>
+        display: none;
+    }
+    #para1, #para2 {
+        display: none;
+    }
+</style>
+<body>
+    <div id="console"></div>
+
+    <p id="p1">The equation: x*y+z</p>
+    <h2>Select your choice</h2>
+    <form>
+        <label>
+            <input type="radio" name="flow" value="continuous" checked> Continuous
+        </label>
+        <br>
+        <label>
+            <input type="radio" name="flow" value="interactive"> Interactive
+        </label>
+        <br>
+    </form>
+    <button id="btn">Submit</button>
+    <text-description id="first" refid="p1" visibility="false" reader="true" flow="continuous">
+        <te-xt id="line1">Level 1: x star y plus z</te-xt><br>
+        <te-xt id="line2">Level 2: x multiplies y added with z</te-xt><br>
+    </text-description>
+    <p id="para1"> Continue to the next level.<br>
+        <button id="btn1">Continue</button>
+    </p>
+    <p id="para2">Do you like me to repeat<br>
+        <button id="btn2">Repeat</button>
+    </p>
+
+    <script src="artyom.window.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        const artyom = new Artyom();
+
+        artyom.addCommands([
+            {
+                indexes: ['Hello', 'hi', 'hey'],
+                action: () => {
+                    artyom.say('Hello! Would you like to use continuous or interactive mode?', {
+                        onStart: () => {
+                            console.log('Hello! Would you like to use continuous or interactive mode?');
+                        },
+                        onEnd: () => {
+                            artyom.redirectRecognizedTextOutput((recognized) => {
+                                const response = recognized.trim().toLowerCase();
+                                if (response === 'continuous') {
+                                    artyom.say("This is how continuous works", {
+                                        onStart: () => {
+                                            console.log("This is how continuous works");
+                                        },
+                                        onEnd: () => {
+                                            // You can add additional actions or logic here if needed.
+                                        },
+                                    });
+                                } else if (response === 'interactive') {
+                                    artyom.say("This is how interactive works",{
+                                        onStart:()=>{console.log("This is how interactive works")},
+    
+                                    });
+                                    // You can add logic for the interactive mode here.
+                                } else {
+                                    artyom.say("Sorry, I didn't understand your choice. Please say 'continuous' or 'interactive'.");
+                                }
+                            });
+                        },
+                    });
+                },
+            },
+        ]);
+
+        artyom.initialize({
+            lang: 'en-GB',
+            continuous: true,
+            soundex: true,
+            smart: true,
+            debug: true,
+            executionKeyword: 'and do it now',
+            listen: true,
+        }).then(() => {
+            console.log("artyom has successfully started");
+            $("#console").append("please speak to execute command");
+        }).catch(err => {
+            console.log("Artyom has failed");
+            $("#console").append("Artyom failed", err);
+        });
+    </script>
 
          <script>
          const radioButtons = document.querySelectorAll('input[name="flow"]');
